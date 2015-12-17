@@ -5,6 +5,7 @@ import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.core.json.Json
 import io.vertx.ext.web.Router
+import io.vertx.ext.web.handler.StaticHandler
 import org.zalando.axiom.web.SwaggerRouter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -15,6 +16,7 @@ class WebApiVerticle(val appMetricsService: AppMetricsService = Injekt.get()) : 
         val metricsRegistry = appMetricsService.metrics
 
         val mainRouter = Router.router(vertx);
+        mainRouter.route("/").handler(StaticHandler.create().setWebRoot("static"));
 
         // @formatter:off
         val operationRouter = SwaggerRouter.configure()

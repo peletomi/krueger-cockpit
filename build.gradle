@@ -62,4 +62,21 @@ task wrapper(type: Wrapper) {
     gradleVersion = "2.8"
 }
 
-defaultTasks 'clean', 'test', 'shadowJar'
+task compileElm(type: Exec) {
+    workingDir './frontend'
+    commandLine 'elm', 'make', 'src/Main.elm', '--output=elm.js'
+}
+
+task copyFrontendFiles(type: Copy) {
+    def targetFolder = 'build/classes/main/static'
+    def folder = new File(targetFolder)
+
+    if( !folder.exists() ) {
+        folder.mkdirs()
+    }
+
+    from files('./frontend/index.html', './frontend/elm.js')
+    into folder
+}
+
+defaultTasks 'clean', 'compileElm', 'copyFrontendFiles', 'test', 'shadowJar'

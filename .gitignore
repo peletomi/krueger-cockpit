@@ -3,4 +3,6 @@ build/
 elm-stuff/
 node_modules/
 .gradle/
+.vertx/
 *.iml
+scm-source.json
