@@ -1,0 +1,20 @@
+configuration:
+    status: warn
+    name: KruegerCockpit
+
+    appenders:
+        appender:
+            - type: console
+              name: STDOUT
+              PatternLayout:
+                  pattern: "%highlight{%d{HH:mm:ss,SSS} %x %level %t %c{1.}.%M(%F:%L): %m%n}"
+    loggers:
+        logger:
+            - name: org.zalando.axiom
+              level: trace
+            - name: uy.kohesive
+              level: debug
+        root:
+            level: error
+            AppenderRef:
+                ref: STDOUT
