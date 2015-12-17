@@ -16,7 +16,7 @@ class WebApiVerticle(val appMetricsService: AppMetricsService = Injekt.get()) : 
         val metricsRegistry = appMetricsService.metrics
 
         val mainRouter = Router.router(vertx);
-        mainRouter.route("/").handler(StaticHandler.create().setWebRoot("static"));
+        mainRouter.route("/*").handler(StaticHandler.create().setWebRoot("static"));
 
         // @formatter:off
         val operationRouter = SwaggerRouter.configure()
