@@ -1,0 +1,59 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "API for retrieval of time series data",
+        "version": "0.0.1"
+    },
+    "host": "krueger.axiom.zalan.do",
+    "schemes": [
+        "https"
+    ],
+    "basePath": "/api",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/applications": {
+            "get": {
+                "summary": "Returns the list of discovered applications."
+            },
+            "responses": {
+                "200": {
+                    "description": "Data",
+                    "schema": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "/data/{applicationId}/{ip}": {
+            "get": {
+                "summary": "Returns the collected metrics for the components endpoints.",
+                "parameters": [
+                    {
+                        "name": "applicationId",
+                        "in": "path",
+                        "description": "ID of the application",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "ip",
+                        "in": "path",
+                        "description": "IP of the application",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

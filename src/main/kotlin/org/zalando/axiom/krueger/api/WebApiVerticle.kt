@@ -6,17 +6,22 @@ import io.vertx.core.Future
 import io.vertx.core.json.Json
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.handler.StaticHandler
+import org.zalando.axiom.krueger.Application
+import org.zalando.axiom.krueger.service.DiscoveryService
+import org.zalando.axiom.krueger.service.TimeSeriesService
 import org.zalando.axiom.web.SwaggerRouter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class WebApiVerticle(val appMetricsService: AppMetricsService = Injekt.get()) : AbstractVerticle() {
+class WebApiVerticle(val appMetricsService: AppMetricsService = Injekt.get(),
+                     val discoveryService: DiscoveryService = Injekt.get(),
+                     val timeSeriesService: TimeSeriesService = Injekt.get()) : AbstractVerticle() {
 
     override fun start(startFuture: Future<Void>?) {
         val metricsRegistry = appMetricsService.metrics
 
         val mainRouter = Router.router(vertx);
-        mainRouter.route("/*").handler(StaticHandler.create().setWebRoot("static"));
+        mainRouter.route("/").handler(StaticHandler.create().setWebRoot("static"));
 
         // @formatter:off
         val operationRouter = SwaggerRouter.configure()
@@ -45,10 +50,23 @@ class WebApiVerticle(val appMetricsService: AppMetricsService = Injekt.get()) : 
                                     .get { -> "ok" }
                                 .doBind()
                                 .router(vertx)
+
+        val apiRouter = SwaggerRouter.configure()
+                                   .collectMetricsTo(metricsRegistry)
+                                   .mapper(Json.mapper)
+                         .swaggerDefinition("/krueger-swagger.json")
+                               .bindTo("/applications")
+                                    .get { -> discoveryService.discoveredApplications }
+                                    .doBind()
+                               .bindTo("/data/:applicationId/:ip")
+                                    .get(Application::class.java) { application -> timeSeriesService.getByApplication(application) }
+                                    .doBind()
+                         .router(vertx)
         // @formatter:on
         mainRouter.mountSubRouter("/", operationRouter)
+        mainRouter.mountSubRouter("/", apiRouter)
 
         val server = vertx.createHttpServer()
-        server.requestHandler { requestHandler -> mainRouter.accept(requestHandler) }.listen(8080)
+        server.requestHandler { requestHandler -> mainRouter.accept(requestHandler) }.listen(8081)
     }
 }

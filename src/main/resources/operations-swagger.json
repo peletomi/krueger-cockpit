@@ -5,7 +5,7 @@
         "description": "This is the API for operating the component",
         "version": "0.0.1"
     },
-    "host": "paco.axiom.zalan.do",
+    "host": "krueger.axiom.zalan.do",
     "schemes": [
         "https"
     ],
