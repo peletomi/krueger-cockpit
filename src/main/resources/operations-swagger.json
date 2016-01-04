@@ -5,7 +5,6 @@
         "description": "This is the API for operating the component",
         "version": "0.0.1"
     },
-    "host": "krueger.axiom.zalan.do",
     "schemes": [
         "https"
     ],
@@ -28,38 +27,19 @@
         },
         "/metrics/statusCodes": {
             "get": {
-                "summary": "Returns histograms for the distribution of status codes per endpoint.",
+                "summary": "Returns a histogram for the distribution of status codes per endpoint.",
+                "description": "Returns a histogram for the returned status codes. The keys of the object are the endpoint names in a format: statusCodes.{HTTP_METHOD}.{SWAGGER_PATH}. If a swagger path contains parameters, then the curlies are replaced with one _ before the parameter name."
                 "responses": {
                     "200": {
                         "description": "Metrics",
                         "schema": {
                             "type": "object"
-                        }
-                    }
-                }
-            }
-        },
-        "/metrics/vertx": {
-            "get": {
-                "summary": "Returns the collected metrics for vertx.",
-                "responses": {
-                    "200": {
-                        "description": "Metrics",
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                }
-            }
-        },
-        "/metrics/eventBus": {
-            "get": {
-                "summary": "Returns the collected metrics for the vertx event bus.",
-                "responses": {
-                    "200": {
-                        "description": "Metrics",
-                        "schema": {
-                            "type": "object"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "statusCodes.GET.data._applicationId._ip._source.200": 2,
+                                "statusCodes.GET.data._applicationId._ip._source.404": 1
+                            }
                         }
                     }
                 }
@@ -67,12 +47,19 @@
         },
         "/env": {
             "get": {
-                "summary": "Returns the environment variables",
+                "summary": "Returns the environment variables as returned by the OS.",
                 "responses": {
                     "200": {
                         "description": "Environment variables",
                         "schema": {
                             "type": "object"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "PATH": "/usr/bin:/bin",
+                                "HOSTNAME": "foobar",
+                                "PWD": "/tmp"
+                            }
                         }
                     }
                 }
@@ -84,6 +71,19 @@
                 "responses": {
                     "200": {
                         "description": "System properties",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "summary": "Returns the health check results",
+                "responses": {
+                    "200": {
+                        "description": "Health endpoint",
                         "schema": {
                             "type": "object"
                         }

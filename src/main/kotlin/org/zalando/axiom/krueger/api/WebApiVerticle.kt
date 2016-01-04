@@ -6,7 +6,7 @@ import io.vertx.core.Future
 import io.vertx.core.json.Json
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.handler.StaticHandler
-import org.zalando.axiom.krueger.Application
+import org.zalando.axiom.krueger.ApplicationQuery
 import org.zalando.axiom.krueger.service.DiscoveryService
 import org.zalando.axiom.krueger.service.TimeSeriesService
 import org.zalando.axiom.web.SwaggerRouter
@@ -28,42 +28,31 @@ class WebApiVerticle(val appMetricsService: AppMetricsService = Injekt.get(),
                                            .collectMetricsTo(metricsRegistry)
                                            .mapper(Json.mapper)
                                 .swaggerDefinition("/operations-swagger.json")
-                                .bindTo("/metrics")
-                                    .get { -> appMetricsService.getApp() }
-                                    .doBind()
-                                .bindTo("/metrics/statusCodes")
-                                    .get { -> appMetricsService.getStatusCodes() }
-                                .doBind()
-                                .bindTo("/metrics/vertx")
-                                    .get { -> appMetricsService.get() }
-                                .doBind()
-                                .bindTo("/metrics/eventBus")
-                                    .get { -> appMetricsService.getEventBus() }
-                                .doBind()
-                                .bindTo("/env")
-                                    .get { -> System.getenv() }
-                                .doBind()
-                                .bindTo("/properties")
-                                    .get { -> System.getProperties() }
-                                .doBind()
-                                .bindTo("/health")
-                                    .get { -> "ok" }
-                                .doBind()
+                                    .get("/metrics") { -> appMetricsService.getApp() }
+                                    .get("/metrics/statusCodes") { -> appMetricsService.getStatusCodes() }
+                                    .get("/env") { -> System.getenv() }
+                                    .get("/properties") { -> System.getProperties() }
+                                    .get("/health") { -> "ok" }
                                 .router(vertx)
+
+        val vertxOperationRouter = SwaggerRouter.configure()
+                                   .collectMetricsTo(metricsRegistry)
+                                   .mapper(Json.mapper)
+                        .swaggerDefinition("/vertx-operations-swagger.json")
+                            .get("/metrics/vertx") { -> appMetricsService.get() }
+                            .get("/metrics/eventBus") { -> appMetricsService.getEventBus() }
+                        .router(vertx)
 
         val apiRouter = SwaggerRouter.configure()
                                    .collectMetricsTo(metricsRegistry)
                                    .mapper(Json.mapper)
                          .swaggerDefinition("/krueger-swagger.json")
-                               .bindTo("/applications")
-                                    .get { -> discoveryService.discoveredApplications }
-                                    .doBind()
-                               .bindTo("/data/:applicationId/:ip")
-                                    .get(Application::class.java) { application -> timeSeriesService.getByApplication(application) }
-                                    .doBind()
+                               .get("/applications") { -> discoveryService.discoveredApplications }
+                               .get("/data/:applicationId/:ip/:source", ApplicationQuery::class.java) { application -> timeSeriesService.getByApplication(application) }
                          .router(vertx)
         // @formatter:on
         mainRouter.mountSubRouter("/", operationRouter)
+        mainRouter.mountSubRouter("/", vertxOperationRouter)
         mainRouter.mountSubRouter("/", apiRouter)
 
         val server = vertx.createHttpServer()

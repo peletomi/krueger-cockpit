@@ -1,0 +1,42 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Operations and monitoring API for vertx",
+        "description": "This is the API for operating the component",
+        "version": "0.0.1"
+    },
+    "schemes": [
+        "https"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/metrics/vertx": {
+            "get": {
+                "summary": "Returns the collected metrics for vertx.",
+                "responses": {
+                    "200": {
+                        "description": "Metrics",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/metrics/eventBus": {
+            "get": {
+                "summary": "Returns the collected metrics for the vertx event bus.",
+                "responses": {
+                    "200": {
+                        "description": "Metrics",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

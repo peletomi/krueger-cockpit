@@ -1,29 +1,39 @@
 module Main where
 
-import Html exposing (..)
+import Html exposing (Html, div)
+import Html.Attributes exposing (..)
+import Signal exposing (Address)
 import StartApp.Simple exposing (start)
 import Set as S
 
 import App.Domain as D
-import View.MainView exposing (..)
+import App.ApiReading as Api
+import View.Nav exposing (..)
+import View.ApplicationGroupList as VAGL
 
--- type alias Model = List D.AppInfo
---
--- type Action = OpenAppGroupInfo
---
--- update : Action -> Model -> Model
--- update action model = model
---
--- -- view : Signal.Address Action -> Model -> Html
--- -- view address model = viewMain
+type alias Model = { applicationGroupList : VAGL.Model }
+
+type Action = ApplicationGroupInfoChanged (List D.AppGroupInfo)
+
+update: Action -> Model -> Model
+update action model =
+    case action of
+        ApplicationGroupInfoChanged appGroupInfo -> VAGL.update (VAGL.ApplicationGroupInfoChanged appGroupInfo) model
+
+init = { appGroupInfo = [], openedIds = S.empty }
+
+view: Address Action -> Model -> Html
+view address model = div [ ] [
+    nav' [ ("Home", "#home") ],
+
+    div [ class "container" ] [
+      div [ class "row" ] [
+        VAGL.view address model
+        ]]]
 
 main =
-  start
-    { model = mockModel
-    , update = updateMain
-    , view = viewMain
+  StartApp.Simple.start
+    { model = init
+    , update = update
+    , view = view
     }
-
-mockAppInfo id num = { applicationId = id, ip = "192.168.2." ++ toString num }
-mockAppGroupInfo id = { applicationId = id, appInfo = List.map (\n -> mockAppInfo id n) [1,2,3,4,5,6,7,8]}
-mockModel = { appGroupInfo = (List.map mockAppGroupInfo ["paco", "product availibility", "reporting"]), openedIds = (S.insert "" S.empty) }

@@ -10586,7 +10586,7 @@ Elm.Main.make = function (_elm) {
    var mockAppGroupInfo = function (id) {
       return {applicationId: id,appInfo: A2($List.map,function (n) {    return A2(mockAppInfo,id,n);},_U.list([1,2,3,4,5,6,7,8]))};
    };
-   var mockModel = {appGroupInfo: A2($List.map,mockAppGroupInfo,_U.list(["paco","product availibility","reporting"])),openedIds: A2($Set.insert,"",$Set.empty)};
+   var mockModel = {appGroupInfo: A2($List.map,mockAppGroupInfo,_U.list(["paco","product availability","reporting"])),openedIds: A2($Set.insert,"",$Set.empty)};
    var main = $StartApp$Simple.start({model: mockModel,update: $View$MainView.updateMain,view: $View$MainView.viewMain});
    return _elm.Main.values = {_op: _op,main: main,mockAppInfo: mockAppInfo,mockAppGroupInfo: mockAppGroupInfo,mockModel: mockModel};
 };

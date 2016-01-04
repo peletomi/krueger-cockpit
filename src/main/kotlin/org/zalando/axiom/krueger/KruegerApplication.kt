@@ -3,6 +3,7 @@ package org.zalando.axiom.krueger
 import de.zalando.axiom.service.AppMetricsService
 import io.vertx.core.DeploymentOptions
 import io.vertx.core.VertxOptions
+import io.vertx.core.json.Json
 import io.vertx.ext.dropwizard.DropwizardMetricsOptions
 import io.vertx.ext.dropwizard.Match
 import io.vertx.ext.dropwizard.MatchType
@@ -23,12 +24,21 @@ import uy.kohesive.injekt.api.addSingleton
 import uy.kohesive.injekt.api.addSingletonFactory
 import uy.kohesive.injekt.api.get
 
+val timeSeriesSources = mapOf(
+        "metrics" to 1000,
+        "env" to 1,
+        "properties" to 1,
+        "health" to 1
+)
+
 object KruegerApplication : InjektMain() {
     @JvmStatic fun main(args: Array<String>) {
         vertx(Injekt.get<VertxOptions>()) success  { vertx ->
             vertx.deployVerticle(DiscoveryVerticle())
             vertx.deployVerticle(TimeSeriesReaderVerticle())
             vertx.deployVerticle(WebApiVerticle::class.java.name, DeploymentOptions().setInstances(8))
+
+            Json.mapper.findAndRegisterModules()
 
             Injekt.registrar.addSingleton(vertx)
             logger().info("Vertx is running!")
@@ -40,7 +50,7 @@ object KruegerApplication : InjektMain() {
         importModule(VertxWithSlf4jInjektables)
         addSingleton(AppMetricsService())
         addSingleton(DiscoveryService())
-        addSingleton(TimeSeriesService())
+        addSingleton(TimeSeriesService(timeSeriesSources))
 
         val application = Application("paco", "localhost:8080")
         val appGroup = ApplicationGroup("paco", setOf(application))
