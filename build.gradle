@@ -44,7 +44,7 @@ dependencies {
     compile "io.swagger:swagger-parser:1.0.13"
     compile "org.apache.httpcomponents:httpclient:4.5.1"
     compile "com.google.guava:guava:19.0"
-    compile "org.zalando:vertx-swagger:0.1.0"
+    compile "org.zalando:vertx-swagger:0.2.1"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.4"
     testCompile "org.assertj:assertj-core:3.2.0"
     testCompile "junit:junit:4.12"
@@ -72,7 +72,7 @@ shadowJar {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = "2.9"
+    gradleVersion = "2.10"
 }
 
 defaultTasks 'clean', 'buildFrontEnd', 'test', 'shadowJar'
