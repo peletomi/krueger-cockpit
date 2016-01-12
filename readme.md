@@ -15,7 +15,7 @@ Starting the application is as easy as:
 
     APPLICATION_GROUP=krueger:localhost:8080 java -jar build/libs/krueger-cockpit-fat.jar
 
-To start the application with [Taupage (etcd)] [id] discovery use
+To start the application with [Taupage (etcd)] [taupage] discovery use
 
     ETCD_URL=etcd.cluster.url java -jar build/libs/krueger-cockpit-fat.jar
 
@@ -24,7 +24,7 @@ To start the application with [Taupage (etcd)] [id] discovery use
 
 # Contributors
 
-* Tamas Eppel <tamas.ferenc.eppel@zalando.de>
+* Tamas Eppel <tamas.ferenz.eppel@zalando.de>
 
 # License
 
