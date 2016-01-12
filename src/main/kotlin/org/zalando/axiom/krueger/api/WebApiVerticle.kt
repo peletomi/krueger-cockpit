@@ -13,7 +13,7 @@ import org.zalando.axiom.web.SwaggerRouter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class WebApiVerticle(val port: Int = 8080,
+class WebApiVerticle(val port: Int = 8081,
                      val appMetricsService: AppMetricsService = Injekt.get(),
                      val discoveryService: DiscoveryService = Injekt.get(),
                      val timeSeriesService: TimeSeriesService = Injekt.get()) : AbstractVerticle() {

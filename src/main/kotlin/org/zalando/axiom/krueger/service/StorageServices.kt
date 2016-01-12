@@ -17,10 +17,12 @@ interface StorageService {
 
 class TimeSeriesService(val sourceConfiguration: Map<String, Int>, val values: MutableMap<Application, TimeSeriesSources> = HashMap()) : StorageService {
 
-    fun getByApplication(applicationQuery: ApplicationQuery) = values[applicationQuery.toApplication()]?.get(applicationQuery.source)
+    private val lock = java.util.concurrent.locks.ReentrantLock()
+
+    fun getByApplication(applicationQuery: ApplicationQuery) = lock.withLock { values[applicationQuery.toApplication()]?.get(applicationQuery.source) }
 
     override fun add(application: Application, source: String, value: JsonObject) {
-        java.util.concurrent.locks.ReentrantLock().withLock {
+        lock.withLock {
             values.getOrPut(application, { TimeSeriesSources(application, sourceConfiguration) }).add(application, source, ApplicationData(value))
         }
     }

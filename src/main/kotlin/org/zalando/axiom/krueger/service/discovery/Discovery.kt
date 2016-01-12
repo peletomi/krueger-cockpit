@@ -17,7 +17,7 @@ class DiscoveryFactory() {
 
     fun getDiscoveryMethods(): List<Discovery> {
         val result = LinkedList<Discovery>()
-        System.getenv("ETCD_DISCOVERY_DOMAIN")?.let { etcdUrl ->
+        System.getenv("ETCD_URL")?.let { etcdUrl ->
             logger().debug("adding taupage discovery using [$etcdUrl]")
             result.add(TaupageDiscovery(etcdUrl))
         }

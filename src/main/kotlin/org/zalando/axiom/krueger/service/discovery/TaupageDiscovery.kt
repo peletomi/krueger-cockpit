@@ -18,7 +18,7 @@ class TaupageDiscoveryCommand(val etcdDomain: String, val mapper: ObjectMapper =
 
     override fun run(): Set<ApplicationGroup>? {
         val result = HashSet<ApplicationGroup>()
-        val etcdNodeUrl = "http://$etcdDomain/v2/keys/taupage"
+        val etcdNodeUrl = if (etcdDomain.startsWith("http://")) "$etcdDomain/v2/keys/taupage" else "http://$etcdDomain/v2/keys/taupage"
         logger().debug("Getting data from [$etcdNodeUrl].")
 
         val get = HttpGet(etcdNodeUrl)

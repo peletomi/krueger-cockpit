@@ -17,7 +17,7 @@ Starting the application is as easy as:
 
 To start the application with [Taupage (etcd)] [id] discovery use
 
-    ETCD_DISCOVERY_DOMAIN=etcd.cluster.url java -jar build/libs/krueger-cockpit-fat.jar
+    ETCD_URL=etcd.cluster.url java -jar build/libs/krueger-cockpit-fat.jar
 
 [springboot]: http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints "Spring Boot Actuator"
 [taupage]: https://github.com/zalando-stups/taupage "Taupage"
