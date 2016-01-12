@@ -2,10 +2,12 @@ package org.zalando.axiom.krueger.api
 
 import de.zalando.axiom.service.AppMetricsService
 import io.vertx.core.AbstractVerticle
+import io.vertx.core.AsyncResultHandler
 import io.vertx.core.Future
 import io.vertx.core.json.Json
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.handler.StaticHandler
+import org.zalando.axiom.krueger.ApplicationGroup
 import org.zalando.axiom.krueger.ApplicationQuery
 import org.zalando.axiom.krueger.service.DiscoveryService
 import org.zalando.axiom.krueger.service.TimeSeriesService
@@ -13,7 +15,7 @@ import org.zalando.axiom.web.SwaggerRouter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class WebApiVerticle(val port: Int = 8081,
+class WebApiVerticle(val port: Int = 8080,
                      val appMetricsService: AppMetricsService = Injekt.get(),
                      val discoveryService: DiscoveryService = Injekt.get(),
                      val timeSeriesService: TimeSeriesService = Injekt.get()) : AbstractVerticle() {
@@ -47,7 +49,7 @@ class WebApiVerticle(val port: Int = 8081,
                                    .collectMetricsTo(metricsRegistry)
                                    .mapper(Json.mapper)
                          .swaggerDefinition("/krueger-swagger.json")
-                               .get("/applications") { -> discoveryService.discoveredApplications }
+                               .get("/applications") { handler: AsyncResultHandler<Set<ApplicationGroup>> -> discoveryService.getDiscoveredApplications(handler) }
                                .get("/data/:applicationId/:ip/:source", ApplicationQuery::class.java) { application -> timeSeriesService.getByApplication(application) }
                          .router(vertx)
         // @formatter:on

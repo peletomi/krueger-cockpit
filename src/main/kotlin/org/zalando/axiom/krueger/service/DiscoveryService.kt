@@ -1,5 +1,7 @@
 package org.zalando.axiom.krueger.service
 
+import io.vertx.core.AsyncResultHandler
+import io.vertx.core.Future
 import org.zalando.axiom.krueger.ApplicationGroup
 import java.util.*
 
@@ -20,6 +22,10 @@ class DiscoveryService() {
             _discoveredApplications.clear()
             _discoveredApplications.addAll(discoveredApplications)
         }
+    }
+
+    fun getDiscoveredApplications(handler: AsyncResultHandler<Set<ApplicationGroup>>) {
+        handler.handle(Future.succeededFuture(discoveredApplications))
     }
 
 }
