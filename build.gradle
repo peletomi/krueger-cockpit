@@ -1,3 +1,6 @@
+import java.nio.file.Files
+import java.nio.file.Paths
+
 buildscript {
     repositories {
         jcenter()
@@ -51,6 +54,16 @@ dependencies {
     testCompile "io.vertx:vertx-unit:3.1.0"
 }
 
+task buildFrontEnd(dependsOn: 'compileKotlin') << {
+    mkdir './build/classes/main/static'
+    exec {
+        workingDir './frontend'
+        commandLine './build.sh', '../build/classes/main/static'
+    }
+}
+//buildFrontEnd.dependsOn compileKotlin
+//buildFrontEnd.shouldRunAfter compileKotlin
+
 shadowJar {
     classifier = "fat"
     manifest {
@@ -65,21 +78,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = "2.8"
 }
 
-task compileElm(type: Exec) {
-    workingDir './frontend'
-    commandLine 'elm', 'make', 'src/Main.elm', '--output=elm.js'
-}
-
-task copyFrontendFiles(type: Copy) {
-    def targetFolder = 'build/classes/main/static'
-    def folder = new File(targetFolder)
-
-    if( !folder.exists() ) {
-        folder.mkdirs()
-    }
-
-    from files('./frontend/index.html', './frontend/elm.js')
-    into folder
-}
-
-defaultTasks 'clean', 'compileElm', 'copyFrontendFiles', 'test', 'shadowJar'
+defaultTasks 'clean', 'buildFrontEnd', 'test', 'shadowJar'

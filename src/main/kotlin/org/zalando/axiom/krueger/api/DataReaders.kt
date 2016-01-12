@@ -32,7 +32,7 @@ class ReadDataCmd(val application: Application, val source: String, val storageS
     }
 
     override fun getFallback() {
-        // no op
+        logger().error("Failed to get data for [$application] and source [$source].", failedExecutionException)
     }
 }
 

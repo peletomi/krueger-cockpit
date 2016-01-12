@@ -14,7 +14,9 @@ import org.zalando.axiom.krueger.logging.logger
 import org.zalando.axiom.krueger.service.DiscoveryService
 import org.zalando.axiom.krueger.service.TimeSeriesService
 import org.zalando.axiom.krueger.service.discovery.Discovery
+import org.zalando.axiom.krueger.service.discovery.DiscoveryFactory
 import org.zalando.axiom.krueger.service.discovery.StaticDiscovery
+import org.zalando.axiom.krueger.service.discovery.TaupageDiscovery
 import uy.klutter.vertx.VertxWithSlf4jInjektables
 import uy.klutter.vertx.vertx
 import uy.kohesive.injekt.Injekt
@@ -51,10 +53,7 @@ object KruegerApplication : InjektMain() {
         addSingleton(AppMetricsService())
         addSingleton(DiscoveryService())
         addSingleton(TimeSeriesService(timeSeriesSources))
-
-        val application = Application("paco", "localhost:8080")
-        val appGroup = ApplicationGroup("paco", setOf(application))
-        addSingleton(StaticDiscovery(setOf(appGroup)) as Discovery)
+        addSingleton(DiscoveryFactory())
     }
 
 

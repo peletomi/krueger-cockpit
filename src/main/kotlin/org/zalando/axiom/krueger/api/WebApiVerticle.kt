@@ -13,7 +13,8 @@ import org.zalando.axiom.web.SwaggerRouter
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class WebApiVerticle(val appMetricsService: AppMetricsService = Injekt.get(),
+class WebApiVerticle(val port: Int = 8080,
+                     val appMetricsService: AppMetricsService = Injekt.get(),
                      val discoveryService: DiscoveryService = Injekt.get(),
                      val timeSeriesService: TimeSeriesService = Injekt.get()) : AbstractVerticle() {
 
@@ -21,7 +22,6 @@ class WebApiVerticle(val appMetricsService: AppMetricsService = Injekt.get(),
         val metricsRegistry = appMetricsService.metrics
 
         val mainRouter = Router.router(vertx);
-        mainRouter.route("/").handler(StaticHandler.create().setWebRoot("static"));
 
         // @formatter:off
         val operationRouter = SwaggerRouter.configure()
@@ -54,8 +54,9 @@ class WebApiVerticle(val appMetricsService: AppMetricsService = Injekt.get(),
         mainRouter.mountSubRouter("/", operationRouter)
         mainRouter.mountSubRouter("/", vertxOperationRouter)
         mainRouter.mountSubRouter("/", apiRouter)
+        mainRouter.route("/*").handler(StaticHandler.create().setWebRoot("static").setCachingEnabled(false));
 
         val server = vertx.createHttpServer()
-        server.requestHandler { requestHandler -> mainRouter.accept(requestHandler) }.listen(8081)
+        server.requestHandler { requestHandler -> mainRouter.accept(requestHandler) }.listen(port)
     }
 }

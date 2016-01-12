@@ -1,8 +1,10 @@
 .idea/
 build/
-elm-stuff/
+jspm_packages/
 node_modules/
 .gradle/
 .vertx/
 *.iml
 scm-source.json
+build.js
+build.js.map

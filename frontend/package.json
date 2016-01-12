@@ -1,19 +1,46 @@
 {
-  "name": "elmer-admin",
+  "name": "krueger-cockpit",
   "version": "1.0.0",
-  "description": "",
-  "main": "elm.js",
-  "dependencies": {
-    "elm": "^0.16.0",
-    "http-server": "^0.8.5"
-  },
-  "devDependencies": {},
+  "description": "Application to display metrics conforming to the Spring Actuator project.",
+  "main": "index.js",
   "scripts": {
-    "postinstall": "npm run make",
-    "make": "elm-make src/Main.elm --output=elm.js",
-    "dev": "ELM_HOME=node_modules/elm/Elm-Platform/0.16.0/share/ elm-reactor",
-    "start": "npm run make && http-server -p 8080"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Tamas Eppel <tamas.ferenz.eppel@zalando.de>",
-  "license": "MIT"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zalando/krueger-cockpit.git"
+  },
+  "author": "Tamas Eppel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zalando/krueger-cockpit/issues"
+  },
+  "homepage": "https://github.com/zalando/krueger-cockpit#readme",
+  "dependencies": {
+    "systemjs": "^0.19.9"
+  },
+  "devDependencies": {
+    "jspm": "^0.16.19"
+  },
+  "jspm": {
+    "dependencies": {
+      "babel-core": "npm:babel-core@^6.3.26",
+      "immutable": "npm:immutable@^3.7.6",
+      "isomorphic-fetch": "npm:isomorphic-fetch@^2.2.0",
+      "react": "npm:react@^0.14.5",
+      "react-dom": "npm:react-dom@^0.14.5",
+      "react-redux": "npm:react-redux@^4.0.6",
+      "redux": "npm:redux@^3.0.5",
+      "redux-actions": "npm:redux-actions@^0.9.0",
+      "redux-logger": "npm:redux-logger@^2.3.1",
+      "redux-promise": "npm:redux-promise@^0.5.0",
+      "redux-thunk": "npm:redux-thunk@^1.0.3",
+      "reselect": "npm:reselect@^2.0.1"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
+  }
 }

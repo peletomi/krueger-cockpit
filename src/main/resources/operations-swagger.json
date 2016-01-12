@@ -28,7 +28,7 @@
         "/metrics/statusCodes": {
             "get": {
                 "summary": "Returns a histogram for the distribution of status codes per endpoint.",
-                "description": "Returns a histogram for the returned status codes. The keys of the object are the endpoint names in a format: statusCodes.{HTTP_METHOD}.{SWAGGER_PATH}. If a swagger path contains parameters, then the curlies are replaced with one _ before the parameter name."
+                "description": "Returns a histogram for the returned status codes. The keys of the object are the endpoint names in a format: statusCodes.{HTTP_METHOD}.{SWAGGER_PATH}. If a swagger path contains parameters, then the curlies are replaced with one _ before the parameter name.",
                 "responses": {
                     "200": {
                         "description": "Metrics",
