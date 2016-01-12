@@ -1,7 +1,7 @@
 # Krueger cockpit
 
 This application displays metrics exposed by standard REST endpoints in other applications. The endpoints are similar
-to the ones used in the [Spring Boot Actuator](http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints) project.
+to the ones used in the [Spring Boot Actuator][springboot] project.
 
 # Development
 
@@ -13,26 +13,14 @@ This will compile the frontend, copy over the resources and compile the backend 
 
 Starting the application is as easy as:
 
-    java -jar build/libs/krueger-cockpit-fat.jar
+    APPLICATION_GROUP=krueger:localhost:8080 java -jar build/libs/krueger-cockpit-fat.jar
 
-To start frontend development do
+To start the application with [Taupage (etcd)] [id] discovery use
 
-    sudo npm install -g elm
-    cd frontend
-    elm package install
+    ETCD_DISCOVERY_DOMAIN=etcd.cluster.url java -jar build/libs/krueger-cockpit-fat.jar
 
-To build just the frontend do:
-
-    cd frontend
-    elm make src/Main.elm --output=elm.js
-
-# Useful elm links
-
-* http://engineering.truqu.com/2015/08/19/real-world-elm-part-1.html
-* https://bendyworks.com/elm-frontend-right-now/
-* http://boonofcode.svbtle.com/setting-up-an-atom-elm-dev-environment
-* https://github.com/basti1302/elm-reactor-custom-html/tree/1.1.0
-* https://github.com/JustusAdam/schedule-planner-web/tree/gh-pages/src
+[springboot]: http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready-endpoints "Spring Boot Actuator"
+[taupage]: https://github.com/zalando-stups/taupage "Taupage"
 
 # Contributors
 

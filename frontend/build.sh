@@ -1,3 +1,5 @@
+#!/bin/bash
+
 out_dir=$1
 if [[ -z $out_dir ]]; then
     echo "Specify out directory!"
